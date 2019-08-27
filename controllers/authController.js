@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const validate = require("../validation/register");
 const db = require("../models");
-const jwt = require("jsonwebtoken");
+
 
 // POST Register Route
 const register = (req, res) => {
@@ -92,25 +92,7 @@ const login = (req, res) => {
         // check if the passwords match
         if (isMatch) {
           // create a json web token
-          let user = {
-            _id: foundUser._id
-          };
-          jwt.sign(
-            user,
-            "waffles",
-            {
-              // its good practice to have an expiration amount for jwt tokens.
-              expiresIn: "1h"
-            },
-            (err, signedJwt) => {
-              return res.status(200).json({
-                status: 200,
-                message: "Success",
-                id: foundUser._id,
-                signedJwt
-              });
-            }
-          );
+          
           // the password provided does not match the password on file.
         } else {
           return res.status(400).json({
@@ -124,7 +106,7 @@ const login = (req, res) => {
 
 // POST Logout Route
 const logout = (req, res) => {
-  // logout functionality
+  // logout functionality only needed on react side
 };
 
 module.exports = {

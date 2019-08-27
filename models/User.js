@@ -20,6 +20,8 @@ const userSchema = new Schema({
   }
 });
 
+
+// remove password in all json responses
 userSchema.set("toJSON", {
   transform: (doc, ret, opt) => {
     delete ret["password"];
