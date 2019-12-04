@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -20,13 +20,13 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.set("toJSON", {
+userSchema.set('toJSON', {
   transform: (doc, ret, opt) => {
-    delete ret["password"];
+    delete ret['password'];
     return ret;
   }
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

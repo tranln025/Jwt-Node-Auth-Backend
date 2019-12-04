@@ -1,17 +1,15 @@
-const db = require("../models");
+const db = require('../models');
 
-const show = (req, res) => {
-  db.User.findById(req.userId, { password: 0, __v: 0 }, (err, foundUser) => {
-    if (err)
-      return res
-        .status(500)
-        .json({
-          status: 500,
-          message: "Something went wrong. Please try again"
-        });
-
+const show = async (req, res) => {
+  try {
+    const foundUser = await db.User.findById(req.userId);
     res.status(200).json({ status: 200, data: foundUser });
-  });
+  } catch (err) {
+    return res.status(500).json({
+      status: 500,
+      message: 'Something went wrong. Please try again'
+    });
+  }
 };
 
 module.exports = {
