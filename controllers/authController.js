@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const validate = require("../validation/register");
 const db = require("../models");
+const jwt = require('jsonwebtoken');
 
 
 // POST Register Route
@@ -92,7 +93,17 @@ const login = (req, res) => {
         // check if the passwords match
         if (isMatch) {
           // create a json web token
-          
+          const payload = {
+            _id: foundUser._id
+          };
+
+          jwt.sign(payload, 'super_secret_password', {expiresIn: '1h'}, (err, signedJwt) => {
+            return res.status(200).json({
+              status: 200,
+              message: 'Success',
+              signedJwt
+            })
+          })
           // the password provided does not match the password on file.
         } else {
           return res.status(400).json({
