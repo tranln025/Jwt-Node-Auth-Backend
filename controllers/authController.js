@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const validate = require("../validation/register");
-const db = require("../models");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
+const validate = require('../validation/register');
+const db = require('../models');
+const jwt = require('jsonwebtoken');
 
 // POST Register Route
 const register = (req, res) => {
@@ -17,13 +17,13 @@ const register = (req, res) => {
     if (err)
       return res.status(500).json({
         status: 500,
-        message: "Something went wrong. Please try again"
+        message: 'Something went wrong. Please try again'
       });
 
     if (foundUser)
       return res.status(400).json({
         status: 400,
-        message: "Email address has already been registered. Please try again"
+        message: 'Email address has already been registered. Please try again'
       });
 
     // Generate Salt (Asynchronous callback version)
@@ -31,7 +31,7 @@ const register = (req, res) => {
       if (err)
         return res.status(500).json({
           status: 500,
-          message: "Something went wrong. Please try again"
+          message: 'Something went wrong. Please try again'
         });
       // if (err) throw err;
 
@@ -40,7 +40,7 @@ const register = (req, res) => {
         if (err)
           return res.status(500).json({
             status: 500,
-            message: "Something went wrong. Please try again"
+            message: 'Something went wrong. Please try again'
           });
 
         const newUser = {
@@ -51,7 +51,7 @@ const register = (req, res) => {
 
         db.User.create(newUser, (err, savedUser) => {
           if (err) return res.status(500).json({ status: 500, message: err });
-          res.status(201).json({ status: 201, message: "success" });
+          res.status(201).json({ status: 201, message: 'success' });
         });
       });
     });
@@ -64,29 +64,29 @@ const login = (req, res) => {
   if (!req.body.email || !req.body.password) {
     return res
       .status(400)
-      .json({ status: 400, message: "Please enter your email and password" });
+      .json({ status: 400, message: 'Please enter your email and password' });
   }
   // Find the user account
   db.User.findOne({ email: req.body.email })
-    .select("+password")
+    .select('+password')
     .exec((err, foundUser) => {
       if (err)
         return res.status(500).json({
           status: 500,
-          message: "Something went wrong. Please try again"
+          message: 'Something went wrong. Please try again'
         });
 
       if (!foundUser) {
         return res
           .status(400)
-          .json({ status: 400, message: "Username or password is incorrect" });
+          .json({ status: 400, message: 'Username or password is incorrect' });
       }
 
       bcrypt.compare(req.body.password, foundUser.password, (err, isMatch) => {
         if (err)
           return res.status(500).json({
             status: 500,
-            message: "Something went wrong. Please try again",
+            message: 'Something went wrong. Please try again',
             err: err
           });
         // check if the passwords match
@@ -97,15 +97,15 @@ const login = (req, res) => {
           };
           jwt.sign(
             user,
-            "waffles",
+            'waffles',
             {
               // its good practice to have an expiration amount for jwt tokens.
-              expiresIn: "1h"
+              expiresIn: '1h'
             },
             (err, signedJwt) => {
               return res.status(200).json({
                 status: 200,
-                message: "Success",
+                message: 'Success',
                 id: foundUser._id,
                 signedJwt
               });
@@ -115,7 +115,7 @@ const login = (req, res) => {
         } else {
           return res.status(400).json({
             status: 400,
-            message: "Username or password is incorrect"
+            message: 'Username or password is incorrect'
           });
         }
       });
@@ -124,7 +124,7 @@ const login = (req, res) => {
 
 // POST Logout Route
 const logout = (req, res) => {
-  // logout functionality
+  // logout functionality not needed. We just remove the JWT on the front end.
 };
 
 module.exports = {
